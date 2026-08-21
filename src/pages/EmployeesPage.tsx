@@ -1,4 +1,4 @@
-import FormField from "../components/FormField";
+// src/pages/EmployeesPage.tsx
 import { useState, useEffect, useCallback } from "react";
 import type {
   Employee,
@@ -9,6 +9,10 @@ import type {
 import { mockEmployees } from "../utils/mockData";
 import EmployeeCard from "../components/EmployeeCard";
 import StatsBadge from "../components/StatsBadge";
+import FormField from "../components/FormField";
+
+const formFieldClass =
+  "w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
 
 function EmployeesPage() {
   // Estado de la lista completa (simulando datos del servidor)
@@ -22,7 +26,6 @@ function EmployeesPage() {
   );
   const [selectedStatus, setSelectedStatus] = useState<EmployeeStatus | "">("");
 
-  // Añade este estado al inicio del componente:
   const [showForm, setShowForm] = useState<boolean>(false);
   const [newName, setNewName] = useState<string>("");
   const [newEmail, setNewEmail] = useState<string>("");
@@ -70,7 +73,7 @@ function EmployeesPage() {
 
   // Memoizamos el handler para no recrearlo en cada render
   const handleSelectEmployee = useCallback((employee: Employee) => {
-    alert(`Empleado: ${employee.name}\nCargo: ${employee.position}\nDepartamento:
+    alert(`Empleado: ${employee.name}\nCargo: ${employee.position}\nDepartamento: 
 ${employee.department}`);
   }, []);
   const handleDeleteEmployee = useCallback((id: number) => {
@@ -145,112 +148,73 @@ ${employee.department}`);
     hr: "Recursos Humanos",
     admin: "Administrador",
   };
-  const formFieldStyle = {
-    padding: "8px 12px",
-    border: "1px solid #cbd5e1",
-    borderRadius: "6px",
-    fontSize: "14px",
-    color: "#1e293b",
-    background: "white",
-    width: "100%",
-    boxSizing: "border-box" as const,
-  };
 
   return (
     <div style={{ padding: "24px" }}>
       {/* Encabezado */}
-      <div
-        style={{
-          marginBottom: "24px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-        }}
-      >
+      <div className="mb-6 flex justify-between items-start">
         <div>
-          <h2 style={{ margin: 0, color: "#1e293b" }}>Gestión de Empleados</h2>
-          <p style={{ margin: "4px 0 0", color: "#64748b" }}>
+          <h2 className="text-2xl font-bold text-slate-900">
+            Gestión de Empleados
+          </h2>
+          <p className="text-slate-500 mt-1">
             {filteredEmployees.length} de {employees.length} empleados
           </p>
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
-          style={{
-            padding: "8px 16px",
-            background: "#1e40af",
-            color: "white",
-            border: "none",
-            borderRadius: "6px",
-            cursor: "pointer",
-            fontSize: "14px",
-          }}
+          className="px-4 py-2 bg-brand-800 hover:bg-brand-700 text-white
+rounded-lg text-sm font-medium transition-colors"
         >
           + Agregar empleado
         </button>
       </div>
 
       {/* Estadísticas */}
-      <div style={{ display: "flex", gap: "16px", marginBottom: "24px" }}>
+      <div className="flex flex-wrap gap-4 mb-6">
         <StatsBadge
           label="Total de empleados"
           value={totalEmployees}
-          color="#2563eb"
+          variant="blue"
         />
         <StatsBadge
           label="Empleados activos"
           value={activeEmployees}
-          color="#16a34a"
+          variant="green"
         />
         <StatsBadge
           label="Empleados en permiso"
           value={onLeaveEmployees}
-          color="#ca8a04"
+          variant="yellow"
         />
         <StatsBadge
           label="Empleados inactivos"
           value={inactiveEmployees}
-          color="#d44444"
+          variant="red"
         />
       </div>
 
       {showForm && (
-        <div
-          style={{
-            padding: "16px",
-            marginBottom: "24px",
-            background: "white",
-            borderRadius: "8px",
-            border: "1px solid #bfdbfe",
-          }}
-        >
-          <p style={{ margin: "0 0 12px", fontWeight: 600, color: "#1e293b" }}>
-            Nuevo empleado
-          </p>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-              gap: "12px",
-              marginBottom: "16px",
-            }}
-          >
-            <FormField label="Nombre completo *">
+        <div className="p-4 mb-6 bg-white rounded-lg border border-blue-200">
+          <p className="mb-3 font-semibold text-slate-900">Nuevo empleado</p>
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-3 mb-4">
+            <FormField label="Nombre *">
               <input
                 type="text"
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
                 placeholder="Ej. Juan Pérez"
-                style={formFieldStyle}
+                autoFocus
+                className={formFieldClass}
               />
             </FormField>
-
-            <FormField label="Correo electrónico *">
+            <FormField label="Email *">
               <input
                 type="email"
                 value={newEmail}
                 onChange={(e) => setNewEmail(e.target.value)}
-                placeholder="Ej. juan.perez@empresa.com"
-                style={formFieldStyle}
+                placeholder="juan.perez@empresa.com"
+                className={formFieldClass}
               />
             </FormField>
 
@@ -260,22 +224,14 @@ ${employee.department}`);
                 value={newPosition}
                 onChange={(e) => setNewPosition(e.target.value)}
                 placeholder="Ej. Analista de Ventas"
-                style={formFieldStyle}
+                className={formFieldClass}
               />
             </FormField>
-
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "4px" }}
-            >
-              <label
-                style={{ fontSize: "12px", fontWeight: 600, color: "#475569" }}
-              >
-                Departamento *
-              </label>
+            <FormField label="Departamento *">
               <select
                 value={newDepartment}
                 onChange={(e) => setNewDepartment(e.target.value as Department)}
-                style={formFieldStyle}
+                className={formFieldClass}
               >
                 {departments.map((dept) => (
                   <option key={dept} value={dept}>
@@ -283,53 +239,32 @@ ${employee.department}`);
                   </option>
                 ))}
               </select>
-            </div>
+            </FormField>
 
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "4px" }}
-            >
-              <label
-                style={{ fontSize: "12px", fontWeight: 600, color: "#475569" }}
-              >
-                Salario mensual *
-              </label>
+            <FormField label="Salario mensual *">
               <input
                 type="number"
                 min="0"
                 value={newSalary}
                 onChange={(e) => setNewSalary(e.target.value)}
                 placeholder="Ej. 8500"
-                style={formFieldStyle}
+                className={formFieldClass}
               />
-            </div>
-
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "4px" }}
-            >
-              <label
-                style={{ fontSize: "12px", fontWeight: 600, color: "#475569" }}
-              >
-                Fecha de ingreso *
-              </label>
+            </FormField>
+            <FormField label="Fecha de ingreso *">
               <input
                 type="date"
                 value={newHireDate}
                 onChange={(e) => setNewHireDate(e.target.value)}
-                style={formFieldStyle}
+                className={formFieldClass}
               />
-            </div>
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "4px" }}
-            >
-              <label
-                style={{ fontSize: "12px", fontWeight: 600, color: "#475569" }}
-              >
-                Estado *
-              </label>
+            </FormField>
+
+            <FormField label="Estado *">
               <select
                 value={newStatus}
                 onChange={(e) => setNewStatus(e.target.value as EmployeeStatus)}
-                style={formFieldStyle}
+                className={formFieldClass}
               >
                 {statuses.map((status) => (
                   <option key={status} value={status}>
@@ -337,20 +272,12 @@ ${employee.department}`);
                   </option>
                 ))}
               </select>
-            </div>
-
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "4px" }}
-            >
-              <label
-                style={{ fontSize: "12px", fontWeight: 600, color: "#475569" }}
-              >
-                Rol *
-              </label>
+            </FormField>
+            <FormField label="Rol *">
               <select
                 value={newRole}
                 onChange={(e) => setNewRole(e.target.value as EmployeeRole)}
-                style={formFieldStyle}
+                className={formFieldClass}
               >
                 {roles.map((role) => (
                   <option key={role} value={role}>
@@ -358,65 +285,38 @@ ${employee.department}`);
                   </option>
                 ))}
               </select>
-            </div>
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "4px" }}
-            >
-              <label
-                style={{ fontSize: "12px", fontWeight: 600, color: "#475569" }}
-              >
-                Teléfono (opcional)
-              </label>
+            </FormField>
+
+            <FormField label="Teléfono (opcional)">
               <input
                 type="text"
                 value={newPhone}
                 onChange={(e) => setNewPhone(e.target.value)}
                 placeholder="Ej. 5555-5555"
-                style={formFieldStyle}
+                className={formFieldClass}
               />
-            </div>
-
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "4px" }}
-            >
-              <label
-                style={{ fontSize: "12px", fontWeight: 600, color: "#475569" }}
-              >
-                URL de foto (opcional)
-              </label>
+            </FormField>
+            <FormField label="URL de foto (opcional)">
               <input
                 type="text"
                 value={newAvatarUrl}
                 onChange={(e) => setNewAvatarUrl(e.target.value)}
                 placeholder="https://..."
-                style={formFieldStyle}
+                className={formFieldClass}
               />
-            </div>
+            </FormField>
           </div>
-          <div style={{ display: "flex", gap: "8px" }}>
+
+          <div className="flex gap-2">
             <button
               onClick={handleAddEmployee}
-              style={{
-                padding: "8px 16px",
-                background: "#16a34a",
-                color: "white",
-                border: "none",
-                borderRadius: "6px",
-                cursor: "pointer",
-              }}
+              className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
             >
               Guardar
             </button>
             <button
               onClick={() => setShowForm(false)}
-              style={{
-                padding: "8px 16px",
-                background: "#e2e8f0",
-                color: "#475569",
-                border: "none",
-                borderRadius: "6px",
-                cursor: "pointer",
-              }}
+              className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-600 rounded-lg transition-colors"
             >
               Cancelar
             </button>
@@ -426,76 +326,28 @@ ${employee.department}`);
 
       {/* Barra de filtros */}
       <div
-        style={{
-          display: "flex",
-          gap: "16px",
-          flexWrap: "wrap",
-          alignItems: "flex-end",
-          marginBottom: "24px",
-          padding: "16px",
-          background: "white",
-          borderRadius: "8px",
-          border: "1px solid #e2e8f0",
-        }}
+        className="bg-white rounded-xl border border-slate-200 p-4 mb-6
+flex flex-wrap items-end gap-3"
       >
         {/* Búsqueda por texto */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "4px",
-            flex: "1",
-            minWidth: "220px",
-          }}
-        >
-          <label
-            style={{ fontSize: "12px", fontWeight: 600, color: "#475569" }}
-          >
-            Buscar
-          </label>
+        <FormField label="Buscar" className="flex-1 min-w-[220px]">
           <input
             type="text"
             placeholder="Buscar por nombre, email o cargo..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            style={{
-              padding: "8px 12px",
-              border: "1px solid #cbd5e1",
-              borderRadius: "6px",
-              fontSize: "14px",
-              color: "#1e293b",
-              background: "white",
-            }}
+            className={formFieldClass}
           />
-        </div>
+        </FormField>
 
         {/* Filtro por departamento */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "4px",
-            minWidth: "180px",
-          }}
-        >
-          <label
-            style={{ fontSize: "12px", fontWeight: 600, color: "#475569" }}
-          >
-            Departamento
-          </label>
+        <FormField label="Departamento" className="min-w-[180px]">
           <select
             value={selectedDepartment}
             onChange={(e) =>
               setSelectedDepartment(e.target.value as Department | "")
             }
-            style={{
-              padding: "8px 12px",
-              border: "1px solid #cbd5e1",
-              borderRadius: "6px",
-              fontSize: "14px",
-              color: "#1e293b",
-              background: "white",
-            }}
+            className={formFieldClass}
           >
             <option value="">Todos los departamentos</option>
             {departments.map((dept) => (
@@ -504,35 +356,16 @@ ${employee.department}`);
               </option>
             ))}
           </select>
-        </div>
+        </FormField>
 
         {/* Filtro por estado */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "4px",
-            minWidth: "160px",
-          }}
-        >
-          <label
-            style={{ fontSize: "12px", fontWeight: 600, color: "#475569" }}
-          >
-            Estado
-          </label>
+        <FormField label="Estado" className="min-w-[160px]">
           <select
             value={selectedStatus}
             onChange={(e) =>
               setSelectedStatus(e.target.value as EmployeeStatus | "")
             }
-            style={{
-              padding: "8px 12px",
-              border: "1px solid #cbd5e1",
-              borderRadius: "6px",
-              fontSize: "14px",
-              color: "#1e293b",
-              background: "white",
-            }}
+            className={formFieldClass}
           >
             <option value="">Todos los estados</option>
             {statuses.map((status) => (
@@ -541,8 +374,7 @@ ${employee.department}`);
               </option>
             ))}
           </select>
-        </div>
-
+        </FormField>
         {/* Botón limpiar filtros */}
         {(search || selectedDepartment || selectedStatus) && (
           <button
@@ -551,15 +383,8 @@ ${employee.department}`);
               setSelectedDepartment("");
               setSelectedStatus("");
             }}
-            style={{
-              padding: "8px 12px",
-              background: "#fee2e2",
-              color: "#dc2626",
-              border: "none",
-              borderRadius: "6px",
-              cursor: "pointer",
-              fontSize: "14px",
-            }}
+            className="px-3 py-2 bg-red-100 hover:bg-red-200 text-red-600
+rounded-lg text-sm transition-colors"
           >
             Limpiar filtros
           </button>
@@ -568,42 +393,33 @@ ${employee.department}`);
 
       {/* Estado de carga */}
       {loading && (
-        <div style={{ textAlign: "center", padding: "48px", color: "#64748b" }}>
+        <div className="text-center py-12 text-slate-500">
           <p>Cargando empleados...</p>
         </div>
       )}
       {/* Sin resultados */}
       {!loading && filteredEmployees.length === 0 && (
-        <div style={{ textAlign: "center", padding: "48px", color: "#64748b" }}>
+        <div className="text-center py-12 text-slate-500">
           <p>No se encontraron empleados con los filtros aplicados.</p>
         </div>
       )}
 
       {/* Lista de empleados */}
       {!loading && filteredEmployees.length > 0 && (
-        <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3
+xl:grid-cols-4 gap-4"
+        >
           {filteredEmployees.map((employee) => (
-            <div key={employee.id} style={{ position: "relative" }}>
+            <div key={employee.id} className="relative">
               <button
                 onClick={() => handleDeleteEmployee(employee.id)}
                 aria-label="Eliminar empleado"
                 title="Eliminar empleado"
-                style={{
-                  position: "absolute",
-                  top: "-10px",
-                  right: "-10px",
-                  zIndex: 1,
-                  width: "24px",
-                  height: "24px",
-                  borderRadius: "50%",
-                  border: "2px solid white",
-                  background: "#ef4444",
-                  color: "white",
-                  cursor: "pointer",
-                  fontSize: "14px",
-                  lineHeight: "20px",
-                  boxShadow: "0 1px 3px rgba(0,0,0,0.25)",
-                }}
+                className="absolute -top-2.5 -right-2.5 z-10 w-6 h-6
+rounded-full border-2 border-white bg-red-500
+text-white cursor-pointer text-sm leading-5
+shadow-md"
               >
                 ×
               </button>
@@ -619,5 +435,4 @@ ${employee.department}`);
     </div>
   );
 }
-
 export default EmployeesPage;
