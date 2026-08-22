@@ -1,117 +1,70 @@
-import { Link, useNavigate } from "react-router-dom";
-import Header from "../layouts/Header";
+// src/pages/DashboardPage.tsx
+
+import { Link } from "react-router-dom";
 import { mockEmployees } from "../utils/mockData";
-import type { User } from "../types";
+import { useAuthStore } from "../store/authStore";
 
 function DashboardPage() {
-  const navigate = useNavigate();
-
-  // Obtener usuario guardado al iniciar sesión
-  const user: User = {
-    name: localStorage.getItem("userName") || "Usuario",
-    role: localStorage.getItem("userRole") || "user",
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("userName");
-
-    navigate("/");
-  };
-
   const total = mockEmployees.length;
   const active = mockEmployees.filter((e) => e.status === "active").length;
   const onLeave = mockEmployees.filter((e) => e.status === "on_leave").length;
+
+  // Texto de bienvenida dinámico: lee el nombre guardado por LoginPage.tsx
+  const userName = useAuthStore((state) => state.user?.name) || "invitado";
 
   const stats = [
     {
       label: "Total empleados",
       value: total,
-      color: "#dbeafe",
-      textColor: "#1e40af",
+      bg: "bg-blue-100",
+      text: "text-blue-800",
     },
     {
       label: "Activos",
       value: active,
-      color: "#dcfce7",
-      textColor: "#166534",
+      bg: "bg-green-100",
+      text: "text-green-800",
     },
     {
       label: "En permiso",
       value: onLeave,
-      color: "#fef9c3",
-      textColor: "#854d0e",
+      bg: "bg-yellow-100",
+      text: "text-yellow-800",
     },
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* HEADER */}
-      <Header user={user} onLogout={handleLogout} showWelcome={true} />
+    <div className="p-6">
+      <h2 className="text-2xl font-bold text-slate-900 mb-1">Dashboard</h2>
+      {userName && (
+        <span className="text-slate-500 mb-6 block animate-pulse">
+          Bienvenido, {userName}
+        </span>
+      )}
+      {!userName && <div className="mb-6" />}
 
-      {/* CONTENIDO */}
-      <main style={{ padding: "24px" }}>
-        <h2
-          style={{
-            color: "#1e293b",
-            marginBottom: "24px",
-          }}
-        >
-          Dashboard
-        </h2>
-
-        <div className="flex flex-col sm:flex-row gap-4 mb-8">
-          {stats.map((stat) => (
-            <div
-              key={stat.label}
-              style={{
-                background: stat.color,
-                padding: "24px",
-                borderRadius: "12px",
-              }}
-              className="flex-1 min-w-[160px] hover:shadow-lg transition-shadow duration-200"
-            >
-              <p
-                style={{
-                  margin: "0 0 4px",
-                  color: stat.textColor,
-                  fontSize: "14px",
-                }}
-              >
-                {stat.label}
-              </p>
-
-              <p
-                style={{
-                  margin: 0,
-                  fontSize: "36px",
-                  fontWeight: 700,
-                  color: stat.textColor,
-                }}
-              >
-                {stat.value}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        <div style={{ display: "flex", gap: "12px" }}>
-          <Link
-            to="/empleados"
-            style={{
-              padding: "10px 20px",
-              background: "#1e40af",
-              color: "white",
-              borderRadius: "6px",
-              textDecoration: "none",
-              fontSize: "14px",
-            }}
+      <div className="flex flex-col sm:flex-row gap-4 mb-8 flex-wrap">
+        {stats.map((stat) => (
+          <div
+            key={stat.label}
+            className={`${stat.bg} p-6 rounded-xl min-w-[160px] flex-1
+                       hover:shadow-lg transition-shadow duration-200`}
           >
-            Ver empleados →
-          </Link>
-        </div>
-      </main>
+            <p className={`${stat.text} text-sm mb-1`}>{stat.label}</p>
+            <p className={`${stat.text} text-4xl font-bold`}>{stat.value}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex gap-3">
+        <Link
+          to="/empleados"
+          className="px-5 py-2.5 bg-brand-800 hover:bg-brand-700 text-white
+                    rounded-lg text-sm transition-colors"
+        >
+          Ver empleados →
+        </Link>
+      </div>
     </div>
   );
 }

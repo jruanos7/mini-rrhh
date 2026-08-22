@@ -50,7 +50,7 @@ ${
             {/* Mensaje de bienvenida */}
             {showWelcome && (
               <span className="hidden md:block text-sm text-white/90 font-medium animate-bounce">
-                Bienvenida!
+                Bienvenido!
               </span>
             )}
             <span className="hidden md:block text-sm text-white/80">
