@@ -22,7 +22,6 @@ export interface Employee {
   avatarUrl?: string;
   phone?: string;
 }
-
 // --- Tipos para creación y actualización ---
  
 export type CreateEmployeeDto = Omit<Employee, "id">;
@@ -58,6 +57,7 @@ export interface PaginatedResponse<T> {
   pageSize: number;
   totalPages: number;
 }
+
 // --- Tipos de navegación ---
  
 export interface NavItem {

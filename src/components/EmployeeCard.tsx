@@ -1,4 +1,3 @@
-// src/components/EmployeeCard.tsx
 import type { Employee } from "../types";
 interface EmployeeCardProps {
   employee: Employee;
@@ -21,19 +20,15 @@ function EmployeeCard({
 }: EmployeeCardProps) {
   const { name, position, department, status, avatarUrl } = employee;
   const statusStyle = statusConfig[status];
-
   return (
     <div
       onClick={() => onSelect?.(employee)}
-      className={`
-bg-white rounded-xl border border-slate-200 p-5 w-full
-hover:shadow-md hover:border-blue-300
+      className={`bg-white rounded-xl border border-slate-200 p-5 w-full hover:shadow-md hover:border-blue-300
 transition-all duration-200
 ${onSelect ? "cursor-pointer" : ""}
 `}
     >
       <div className="flex items-center gap-3">
-        ×
         <div
           className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden text-blue-700 font-semibold 
 text-lg flex-shrink-0"
@@ -53,7 +48,6 @@ text-lg flex-shrink-0"
           <p className="text-sm text-slate-500 truncate">{position}</p>
         </div>
       </div>
-
       <div className="mt-4 flex items-center justify-between gap-2">
         <span className="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full font-medium truncate">
           {department}

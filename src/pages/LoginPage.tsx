@@ -1,4 +1,3 @@
-// src/pages/LoginPage.tsx
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
@@ -14,7 +13,6 @@ function LoginPage() {
       navigate("/dashboard", { replace: true });
     }
   }, [isAuthenticated, navigate]);
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     clearError();
@@ -45,7 +43,6 @@ function LoginPage() {
 focus:ring-blue-500 disabled:bg-slate-50"
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1.5">
               Contraseña
@@ -61,7 +58,6 @@ focus:ring-blue-500 disabled:bg-slate-50"
 focus:ring-blue-500 disabled:bg-slate-50"
             />
           </div>
-
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
               {error}
