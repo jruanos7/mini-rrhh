@@ -1,0 +1,85 @@
+{
+  "employees": [
+    {
+      "id": 1,
+      "name": "Ana García",
+      "email": "ana.garcia@empresa.com",
+      "position": "Desarrolladora Frontend",
+      "department": "Tecnología",
+      "salary": 8500,
+      "hireDate": "2022-03-15",
+      "status": "active",
+      "role": "employee",
+      "avatarUrl": "https://i.pravatar.cc/64?img=1"
+    },
+    {
+      "id": 2,
+      "name": "Carlos Martínez",
+      "email": "carlos.martinez@empresa.com",
+      "position": "Gerente de RRHH",
+      "department": "Recursos Humanos",
+      "salary": 12000,
+      "hireDate": "2019-07-01",
+      "status": "active",
+      "role": "hr"
+    },
+    {
+      "id": 3,
+      "name": "María López",
+      "email": "maria.lopez@empresa.com",
+      "position": "Contadora Senior",
+      "department": "Finanzas",
+      "salary": 9500,
+      "hireDate": "2021-01-20",
+      "status": "on_leave",
+      "role": "employee"
+    },
+    {
+      "id": 4,
+      "name": "Roberto Silva",
+      "email": "roberto.silva@empresa.com",
+      "position": "Administrador del Sistema",
+      "department": "Tecnología",
+      "salary": 15000,
+      "hireDate": "2018-05-10",
+      "status": "active",
+      "role": "admin"
+    },
+    {
+      "name": "Mia Ruano",
+      "email": "Mia@ruano2",
+      "position": "Administradora",
+      "department": "Operaciones",
+      "salary": 9000,
+      "hireDate": "2023-01-13",
+      "status": "active",
+      "role": "admin",
+      "phone": "45097359",
+      "id": 8
+    },
+    {
+      "name": "Alberto Hernandez",
+      "email": "Albert@H",
+      "position": "Contador",
+      "department": "Finanzas",
+      "salary": 8500,
+      "hireDate": "2025-07-31",
+      "status": "active",
+      "role": "employee",
+      "phone": "55522375",
+      "id": 9
+    },
+    {
+      "name": "Amanda Sandoval",
+      "email": "Sandoval@amanda.gt",
+      "position": "Secretaria",
+      "department": "Ventas",
+      "salary": 9000,
+      "hireDate": "2024-07-02",
+      "status": "active",
+      "role": "employee",
+      "phone": "57708986",
+      "id": 10
+    }
+  ]
+}
