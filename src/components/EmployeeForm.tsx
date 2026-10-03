@@ -135,6 +135,7 @@ function EmployeeForm({
             aria-describedby={errors.name ? "name-error" : undefined}
           />
         </FormField>
+
         <FormField
           label="Correo electrónico"
           error={errors.email?.message}
@@ -205,6 +206,7 @@ function EmployeeForm({
             aria-required="true"
           />
         </FormField>
+
         <FormField
           label="Fecha de ingreso"
           error={errors.hireDate?.message}
@@ -271,16 +273,14 @@ function EmployeeForm({
           type="button"
           onClick={onCancel}
           disabled={isLoading}
-          className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 border border-slate-300 hover:border-slate-400 
-          rounded-lg transition-colors disabled:opacity-50"
+          className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 border border-slate-300 hover:border-slate-400 rounded-lg transition-colors disabled:opacity-50"
         >
           Cancelar
         </button>
         <button
           type="submit"
           disabled={isLoading || (!isDirty && isEditing)}
-          className="px-4 py-2 text-sm font-medium text-white bg-brand-800 hover:bg-brand-700 rounded-lg transition-colors 
-          disabled:opacity-50 min-w-24"
+          className="px-4 py-2 text-sm font-medium text-white bg-brand-800 hover:bg-brand-700 rounded-lg transition-colors disabled:opacity-50 min-w-24"
         >
           {isLoading
             ? "Guardando..."

@@ -1,7 +1,7 @@
 // src/pages/DashboardPage.tsx
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
-import type { AuthState } from "../store/authStore";
+import { useHasRole } from "../components/RoleGuard";
 import { useEmployees } from "../hooks/useEmployees";
 
 const statVariants = {
@@ -11,8 +11,8 @@ const statVariants = {
 };
 
 function DashboardPage() {
-  const userName =
-    useAuthStore((state: AuthState) => state.user?.name) || "invitado";
+  const userName = useAuthStore((state) => state.user?.firstName) || "invitado";
+  const canManageEmployees = useHasRole(["ADMIN", "HR_MANAGER"]);
   // Mismos datos que EmployeesPage — TanStack Query comparte el cache entre
   // ambas pantallas, así que esto no dispara una petición nueva si ya se
   // cargó la lista sin filtros en otra vista.
@@ -48,14 +48,16 @@ function DashboardPage() {
         })}
       </div>
 
-      <div className="flex gap-3">
-        <Link
-          to="/empleados"
-          className="px-5 py-2.5 bg-brand-800 hover:bg-brand-700 text-white rounded-lg text-sm transition-colors"
-        >
-          Ver empleados →
-        </Link>
-      </div>
+      {canManageEmployees && (
+        <div className="flex gap-3">
+          <Link
+            to="/empleados"
+            className="px-5 py-2.5 bg-brand-800 hover:bg-brand-700 text-white rounded-lg text-sm transition-colors"
+          >
+            Ver empleados →
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

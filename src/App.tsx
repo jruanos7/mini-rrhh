@@ -1,4 +1,5 @@
 // src/App.tsx
+import { useEffect } from "react";
 import type { ReactNode } from "react";
 import {
   BrowserRouter,
@@ -12,8 +13,8 @@ import Header from "./layouts/Header";
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import EmployeesPage from "./pages/EmployeesPage";
-import EmployeeDetailPage from "./pages/EmployeeDetailPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import RoleGuard from "./components/RoleGuard";
 import { useAuthStore } from "./store/authStore";
 
 // Layout con Header para páginas autenticadas
@@ -35,6 +36,16 @@ function AppLayout({ children }: { children: ReactNode }) {
 }
 
 function App() {
+  const checkTokenValidity = useAuthStore((state) => state.checkTokenValidity);
+
+  useEffect(() => {
+    checkTokenValidity();
+
+    // Verificar cada 5 minutos si el access token sigue vigente
+    const interval = setInterval(checkTokenValidity, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [checkTokenValidity]);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -53,30 +64,22 @@ function App() {
           }
         />
 
+        {/* Solo ADMIN y HR_MANAGER gestionan empleados; EMPLOYEE no entra */}
         <Route
           path="/empleados"
           element={
             <ProtectedRoute>
               <AppLayout>
-                <EmployeesPage />
+                <RoleGuard allowedRoles={["ADMIN", "HR_MANAGER"]}>
+                  <EmployeesPage />
+                </RoleGuard>
               </AppLayout>
             </ProtectedRoute>
           }
         />
 
-        <Route
-          path="/empleados/:id"
-          element={
-            <ProtectedRoute>
-              <AppLayout>
-                <EmployeeDetailPage />
-              </AppLayout>
-            </ProtectedRoute>
-          }
-        />
-
-        {/* La raíz siempre debe abrir la pantalla de login */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        {/* Redirigir raíz según autenticación */}
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
         {/* 404 */}
         <Route

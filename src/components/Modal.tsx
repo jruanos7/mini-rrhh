@@ -1,12 +1,14 @@
 // src/components/Modal.tsx
 import { useEffect } from "react";
 import type { ReactNode } from "react";
+
 interface ModalProps {
   isOpen: boolean;
   title: string;
   onClose: () => void;
   children: ReactNode;
 }
+
 function Modal({ isOpen, title, onClose, children }: ModalProps) {
   // Cerrar con Escape
   useEffect(() => {
@@ -18,6 +20,7 @@ function Modal({ isOpen, title, onClose, children }: ModalProps) {
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
@@ -31,6 +34,7 @@ function Modal({ isOpen, title, onClose, children }: ModalProps) {
         onClick={onClose}
         aria-hidden="true"
       />
+
       {/* Contenido del modal */}
       <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-6 border-b border-slate-100">
@@ -50,4 +54,5 @@ function Modal({ isOpen, title, onClose, children }: ModalProps) {
     </div>
   );
 }
+
 export default Modal;
