@@ -1,6 +1,8 @@
 // src/hooks/useEmployees.ts
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { employeeService, type EmployeeFilters } from '../services/employeeService';
+ import toast from 'react-hot-toast';
+import { handleError } from '../utils/errorHandler'
 import type { CreateEmployeeDto, UpdateEmployeeDto } from '../types';
 
 // Query key factory — centraliza los nombres de las queries
@@ -33,10 +35,14 @@ export function useCreateEmployee() {
 
   return useMutation({
     mutationFn: (data: CreateEmployeeDto) => employeeService.create(data),
-    onSuccess: () => {
+    onSuccess: (newEmployee) => {
       // Invalida la lista para que se refetche
       queryClient.invalidateQueries({ queryKey: employeeKeys.all });
+      toast.success(`${newEmployee.name} fue agregado exitosamente.`);
     },
+     onError: (error) => {
+       handleError(error, 'Error al crear empleado');
+  },
   });
 }
 
@@ -53,8 +59,13 @@ export function useUpdateEmployee() {
         employeeKeys.detail(updatedEmployee.id),
         updatedEmployee
       );
-      queryClient.invalidateQueries({ queryKey: employeeKeys.all });
-    },
+      queryClient.invalidateQueries({ queryKey: employeeKeys.all }); 
+   
+toast.success(`${updatedEmployee.name} fue actualizado exitosamente.`);
+},
+onError: (error) => {
+handleError(error, 'Error al actualizar empleado');
+},
   });
 }
 
@@ -65,7 +76,10 @@ export function useDeleteEmployee() {
   return useMutation({
     mutationFn: (id: number) => employeeService.delete(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: employeeKeys.all });
-    },
+      queryClient.invalidateQueries({ queryKey: employeeKeys.all }); toast.success('Empleado eliminado correctamente.');
+},
+  onError: (error) => {
+       handleError(error, 'Error al eliminar empleado');
+     },
   });
 }
