@@ -43,10 +43,4 @@ function RoleGuard({ children, allowedRoles, fallback }: RoleGuardProps) {
   return <>{children}</>;
 }
 
-// Hook utilitario para verificar rol en cualquier componente
-export function useHasRole(roles: AuthRole[]): boolean {
-  const user = useAuthStore((state) => state.user);
-  return !!user && roles.includes(user.role.code);
-}
-
 export default RoleGuard;
