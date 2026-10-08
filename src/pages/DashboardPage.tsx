@@ -1,7 +1,7 @@
 // src/pages/DashboardPage.tsx
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
-import { useHasRole } from "../components/RoleGuard";
+import { useHasRole } from "../hooks/useHasRole";
 import { useEmployees } from "../hooks/useEmployees";
 
 const statVariants = {

@@ -1,7 +1,7 @@
 // src/layouts/Header.tsx
 import { Link, useLocation } from "react-router-dom";
 import type { AuthUser, NavItem } from "../types";
-import { useHasRole } from "../components/RoleGuard";
+import { useHasRole } from "../hooks/useHasRole";
 
 interface HeaderProps {
   user?: AuthUser;

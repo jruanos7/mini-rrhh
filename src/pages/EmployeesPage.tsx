@@ -13,7 +13,7 @@ import {
   useDeleteEmployee,
 } from "../hooks/useEmployees";
 import type { EmployeeFormData } from "../schemas/employeeSchema";
-import { useHasRole } from "../components/RoleGuard";
+import { useHasRole } from "../hooks/useHasRole";
 
 const formFieldClass =
   "w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
