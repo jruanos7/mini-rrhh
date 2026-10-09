@@ -5,7 +5,6 @@ import {
   Routes,
   Route,
   Navigate,
-  Link,
   useNavigate,
 } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
@@ -13,6 +12,7 @@ import Header from "./layouts/Header";
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import EmployeesPage from "./pages/EmployeesPage";
+import NotFoundPage from "./pages/NotFoundPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RoleGuard from "./components/RoleGuard";
 import { useAuthStore } from "./store/authStore";
@@ -82,22 +82,7 @@ function App() {
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
         {/* 404 */}
-        <Route
-          path="*"
-          element={
-            <div
-              style={{
-                minHeight: "100vh",
-                background: "#f8fafc",
-                textAlign: "center",
-                padding: "80px",
-              }}
-            >
-              <h2 style={{ color: "#1e293b" }}>404 — Página no encontrada</h2>
-              <Link to="/dashboard">Volver al inicio</Link>
-            </div>
-          }
-        />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Toaster
         position="top-right"

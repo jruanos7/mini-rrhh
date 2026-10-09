@@ -14,6 +14,7 @@ import {
 } from "../hooks/useEmployees";
 import type { EmployeeFormData } from "../schemas/employeeSchema";
 import { useHasRole } from "../hooks/useHasRole";
+import { extractErrorMessage } from "../utils/errorHandler";
 
 const formFieldClass =
   "w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
@@ -46,6 +47,8 @@ function EmployeesPage() {
     isLoading: loading,
     isError,
     error: queryError,
+    refetch,
+    isFetching,
   } = useEmployees({
     search: search || undefined,
     department: selectedDepartment || undefined,
@@ -55,7 +58,7 @@ function EmployeesPage() {
 
   // Segunda query, sin filtros — las estadísticas son sobre el TOTAL de empleados,
   // no sobre el filtro activo, así que necesitan su propia lista completa cacheada aparte.
-  const { data: allData } = useEmployees({});
+  const { data: allData, refetch: refetchAll } = useEmployees({});
   const allEmployees = useMemo(() => allData?.data ?? [], [allData]);
   const totalEmployees = allEmployees.length;
   const activeEmployees = allEmployees.filter(
@@ -117,6 +120,12 @@ function EmployeesPage() {
     setModalOpen(true);
   }, []);
 
+  // Reintenta ambas queries (lista filtrada y estadísticas) tras un error
+  const handleRetry = useCallback(() => {
+    refetch();
+    refetchAll();
+  }, [refetch, refetchAll]);
+
   // React Hook Form ya validó los datos con Zod antes de llegar acá —
   // esta función solo decide crear vs. actualizar y llama a la mutación correcta.
   const handleSubmit = useCallback(
@@ -164,7 +173,9 @@ function EmployeesPage() {
           <p className="text-slate-500 mt-1">
             {loading
               ? "Cargando..."
-              : `${employees.length} de ${totalEmployees} empleados`}
+              : isError
+                ? "No se pudo cargar la lista"
+                : `${employees.length} de ${totalEmployees} empleados`}
           </p>
         </div>
         <button
@@ -278,8 +289,15 @@ function EmployeesPage() {
             Error al cargar los empleados
           </p>
           <p className="text-red-500 text-sm mt-1">
-            {(queryError as Error)?.message || "Error desconocido"}
+            {extractErrorMessage(queryError)}
           </p>
+          <button
+            onClick={handleRetry}
+            disabled={isFetching}
+            className="mt-4 px-4 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-60 disabled:cursor-not-allowed text-white rounded-lg text-sm font-medium transition-colors"
+          >
+            {isFetching ? "Reintentando..." : "Reintentar"}
+          </button>
         </div>
       )}
 
