@@ -92,6 +92,7 @@ toast.error('No tienes permisos para realizar esta acción.', { id: 'error-403' 
 toast.error('Error del servidor. Intenta de nuevo en unos momentos.', { id: 'error-5xx' });
 }
 }
+
 // Errores locales (400, 404, 409, 422...): cada operación los muestra con su contexto
 export function handleError(error: unknown, context?: string): void {
 console.error('[Error]', context, error);
@@ -118,8 +119,10 @@ if (details) {
 details.forEach(({ field, messages }) => setError(field, { message: messages[0] }));
 return;
 }
+
 const errors = (data as { errors?: Record<string, string> } | undefined)?.errors;
 if (errors) {
 Object.entries(errors).forEach(([field, message]) => setError(field, { message }));
 }
 }
+
