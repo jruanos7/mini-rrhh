@@ -12,7 +12,7 @@ export const apiClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 10000,
+  timeout: 60000,
 });
 
 // Errores de infraestructura (red caída, 5xx): un toast global por todas las peticiones.
