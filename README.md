@@ -1,75 +1,82 @@
-# React + TypeScript + Vite
+# Mini RRHH
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación de gestión de recursos humanos hecha con React y TypeScript. Permite iniciar sesión, ver un dashboard con estadísticas y administrar empleados (crear, editar, filtrar y eliminar) según el rol del usuario.
 
-Currently, two official plugins are available:
+## Sitio desplegado
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+**https://mini-rrhh-gkut.vercel.app**
 
-## React Compiler
+> Las credenciales de acceso son las de la instancia de API-RH entregadas por el docente.
+> La API de empleados corre en el plan gratuito de Render, que se "duerme" con la inactividad. Si la lista tarda en cargar la primera vez, espera cerca de un minuto y pulsa **Reintentar**.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tecnologías
 
-## Expanding the ESLint configuration
+- React 19 + TypeScript + Vite
+- Tailwind CSS 4
+- React Router 7
+- TanStack Query (estado del servidor)
+- Zustand (sesión)
+- React Hook Form + Zod (formularios y validación)
+- Axios (con interceptores de errores)
+- React Hot Toast (notificaciones)
+- json-server (API simulada de empleados)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Funcionalidades
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Inicio de sesión contra API-RH, con renovación del token.
+- Rutas protegidas y restricción por rol (`ADMIN`, `HR_MANAGER`, `EMPLOYEE`).
+- Gestión de empleados: listado, búsqueda, filtros por departamento y estado, creación, edición y cambio de estado.
+- Eliminar empleados está permitido solo al rol `ADMIN`.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Actividad 4
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- **`NotFoundPage.tsx`**: página 404 con diseño propio en Tailwind y un botón para volver al dashboard. Se muestra en la ruta `*`.
+- **Hook `usePageNotFound`**: usa `useLocation` de React Router y registra con `console.warn` la URL que no se encontró.
+- **Error visible en `EmployeesPage`**: cuando `isError` es verdadero se muestra una card con el mensaje del error (mediante `extractErrorMessage`) y un botón **Reintentar** que ejecuta `refetch`.
+- **Refactor**: el hook `useHasRole` se movió a `src/hooks/useHasRole.ts` para mantener el Fast Refresh en `RoleGuard.tsx`.
 
+## Ejecutar en local
+
+1. Instala las dependencias:
+
+```bash
+   npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Crea un archivo `.env.local` en la raíz, tomando como base `.env.example`:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```dotenv
+   VITE_API_URL=http://localhost:3001
+   VITE_AUTH_API_URL=<URL de la instancia de API-RH>
 ```
+
+3. Levanta la API simulada de empleados (puerto 3001):
+
+```bash
+   npm run mock-api
+```
+
+4. En otra terminal, levanta la aplicación:
+
+```bash
+   npm run dev
+```
+
+## Probar la Actividad 4
+
+- **404:** abre una ruta que no existe, por ejemplo `/algo-raro?x=1`, y revisa la consola del navegador.
+- **Error visible:** con la app abierta en `/empleados`, apaga `npm run mock-api` y recarga. Aparecerá la card de error. Vuelve a encender la API y pulsa **Reintentar**.
+
+## Scripts
+
+| Comando | Descripción |
+| --- | --- |
+| `npm run dev` | Servidor de desarrollo |
+| `npm run build` | Compilación de producción |
+| `npm run lint` | Revisión con ESLint |
+| `npm run mock-api` | API simulada con json-server |
+
+## Despliegue
+
+- **Frontend:** Vercel. El archivo `vercel.json` reescribe las rutas hacia `index.html` y reenvía `/api/v1/*` a API-RH para evitar problemas de CORS.
+- **API de empleados:** Render (json-server con `db.json`).
